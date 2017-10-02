@@ -14,7 +14,8 @@ public class ModifyPDF {
 
         System.out.println("ennyi gyerkőc van: " + readExcel.index);
         //eddig kell majd hivatalosan menjen: readExcel.index
-        for (int i = 1; i <= 1; i++) {
+        //FIGYELEM AZ INDEXELES ONNAN KEZDODIK AMIKOR vannak adatok javitas folyamatban
+        for (int i = 13; i <= 13; i++) {
             String filename = "Torzslap-Stamped.pdf";
             Document document = new Document(PageSize.A4);
             try {
@@ -27,11 +28,16 @@ public class ModifyPDF {
                 PdfImportedPage page = writer.getImportedPage(reader, 1);
                 document.newPage();
                 cb.addTemplate(page, 0, 0);
-                //A4 meret: 595x842
 
+                //A4 meret: 595x842
                 PlaceChunck(readExcel.tanulo[i].getNev(), 100, 744);
                 PlaceChunck(readExcel.tanulo[i].getAzonosito(), 350, 746);
-                //PlaceChunck(readExcel.tanulo[i].getHely(), 100, 718);
+                PlaceChunck(readExcel.tanulo[i].getHely(), 100, 722);
+                PlaceChunck(readExcel.tanulo[i].getSzuletes(), 350, 718);
+                PlaceChunck(readExcel.tanulo[i].getAnyanev(), 100, 698);
+                PlaceChunck(readExcel.tanulo[i].getEvfolyam(), 100, 766);
+                PlaceChunck(readExcel.tanulo[i].getBeirasinaplo(), 240, 766);
+                PlaceChunck(readExcel.tanulo[i].getSornaploszam(), 350, 766);
                 System.out.println("\n" + readExcel.tanulo[i].getHely()+"\n");
 
                 //document.add(createFirstTable());
@@ -50,7 +56,7 @@ public class ModifyPDF {
         PdfContentByte cb = writer.getDirectContent();
         BaseFont bf = null;
         try {
-            bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (IOException e) {
