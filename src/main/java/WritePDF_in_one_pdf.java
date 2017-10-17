@@ -35,19 +35,64 @@ public class WritePDF_in_one_pdf {
 
                 writer.setPageEmpty(false);
 
+                int year = tanulo[i].getSzuletes().getYear();
+                int month = tanulo[i].getSzuletes().getMonth();
+                int day = tanulo[i].getSzuletes().getDate();
+                month++;
+                year -= 100;
+
+                //SimpleDateFormat simpleDateFormat = new SimpleDateFormat(tanulo[i].getSzuletes().toString());
+
+
+
+                System.out.println(tanulo[i].getSzuletes().getMonth());
+                System.out.println(tanulo[i].getSzuletes().getYear());
+                System.out.println(day);
+                System.out.println(tanulo[i].getSzuletes().toString()+"\n");
+
+                String nap;
+                if (day <= 9) {
+                    nap = "0";
+                    nap += String.valueOf(day);
+                }else{
+                    nap = String.valueOf(day);
+                }
+
+                String honap;
+                if (month <= 9){
+                    honap = "0";
+                    honap += String.valueOf(month);
+                }else{
+                    honap = String.valueOf(month);
+                }
+
+                String ev;
+                if (year <= 9){
+                    if (year == 0){
+                     ev = "2000";
+                    }else {
+                        ev = "200" + year;
+                    }
+                }else{
+                    ev = "20" + year;
+                }
+
+                String date = ev + "." + honap + "." + nap + ".";
+
+                //String datum = String.valueOf(year) + "." + String.valueOf(month) + "." + String.valueOf(day) + ".";
 
 
                 PlaceChunck(writer, tanulo[i].getNev(), 100, 744);
                 PlaceChunck(writer, tanulo[i].getAzonosito(), 350, 746);
                 PlaceChunck(writer, tanulo[i].getHely(), 100, 721);
-                PlaceChunck(writer, tanulo[i].getSzuletes().toString(), 350, 721);
+                PlaceChunck(writer, date, 350, 721);
                 PlaceChunck(writer, tanulo[i].getAnyanev(), 100, 698);
                 PlaceChunck(writer, tanulo[i].getEvfolyam(), 100, 766);
                 PlaceChunck(writer, tanulo[i].getBeirasinaplo(), 240, 766);
                 PlaceChunck(writer, tanulo[i].getSornaploszam(), 350, 766);
                 PlaceChunck(writer, "magyar", 100, 677);
 
-                System.out.println("\n" + tanulo[i].getHely()+"\n");
+                //System.out.println("\n" + tanulo[i].getHely()+"\n");
 
 
                 //document.add(createFirstTable());

@@ -24,11 +24,17 @@ public class WritePDF {
 
                 document.open();
 
+                int year = tanulo[i].getSzuletes().getYear();
+                int month = tanulo[i].getSzuletes().getMonth();
+                int day = tanulo[i].getSzuletes().getDay();
+
+                String datum = String.valueOf(year) + "." + String.valueOf(month) + "." + String.valueOf(day) + ".";
+
 
                 PlaceChunck(tanulo[i].getNev(), 100, 744);
                 PlaceChunck(tanulo[i].getAzonosito(), 350, 746);
                 PlaceChunck(tanulo[i].getHely(), 100, 722);
-                PlaceChunck(tanulo[i].getSzuletes().toString(), 350, 718);
+                PlaceChunck(datum, 350, 718);
                 PlaceChunck(tanulo[i].getAnyanev(), 100, 698);
                 PlaceChunck(tanulo[i].getEvfolyam(), 100, 766);
                 PlaceChunck(tanulo[i].getBeirasinaplo(), 240, 766);

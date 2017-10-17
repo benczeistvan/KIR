@@ -174,13 +174,7 @@ public class ReadExcelJo {
                             }
 
                             if (j == sajatSzuletes) {
-
-                                String string = cellData.toString();
-                                DateFormat format = new SimpleDateFormat("dd-MMM.-yyyy", Locale.ENGLISH);
-                                Date date = format.parse(string);
-                                System.out.println(date);
-
-                                tanulo[index].setSzuletes(date);
+                                tanulo[index].setSzuletes(cellData.getDateCellValue());
                                 //System.out.println(tanulo[index].getSzuletes().toCharArray());
                             }
 
