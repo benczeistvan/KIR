@@ -10,14 +10,15 @@ public class ModifyPDF {
     PdfWriter writer;
     public String templateInputStream = "/Users/istvan/projektek/excell 2/src/main/java/torzslap.pdf";
 
-    public boolean modify(ReadExcel readExcel){
+    public boolean modify(Tanulo tanulo[], int index, String DESTINATION){
 
-        System.out.println("ennyi gyerkőc van: " + readExcel.index);
+        System.out.println("ennyi gyerkőc van: " + index);
         //eddig kell majd hivatalosan menjen: readExcel.index
         //FIGYELEM AZ INDEXELES ONNAN KEZDODIK AMIKOR vannak adatok javitas folyamatban
-        for (int i = 13; i <= 13; i++) {
-            String filename = "Torzslap-Stamped.pdf";
+        for (int i = 1; i <= index; i++) {
+            String filename = DESTINATION + "/" + i + ". " + tanulo[i].getNev() + ".pdf";
             Document document = new Document(PageSize.A4);
+
             try {
                 writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
 
@@ -30,15 +31,16 @@ public class ModifyPDF {
                 cb.addTemplate(page, 0, 0);
 
                 //A4 meret: 595x842
-                PlaceChunck(readExcel.tanulo[i].getNev(), 100, 744);
-                PlaceChunck(readExcel.tanulo[i].getAzonosito(), 350, 746);
-                PlaceChunck(readExcel.tanulo[i].getHely(), 100, 722);
-                PlaceChunck(readExcel.tanulo[i].getSzuletes(), 350, 718);
-                PlaceChunck(readExcel.tanulo[i].getAnyanev(), 100, 698);
-                PlaceChunck(readExcel.tanulo[i].getEvfolyam(), 100, 766);
-                PlaceChunck(readExcel.tanulo[i].getBeirasinaplo(), 240, 766);
-                PlaceChunck(readExcel.tanulo[i].getSornaploszam(), 350, 766);
-                System.out.println("\n" + readExcel.tanulo[i].getHely()+"\n");
+                PlaceChunck(tanulo[i].getNev(), 102, 744);
+                PlaceChunck(tanulo[i].getAzonosito(), 350, 746);
+                PlaceChunck(tanulo[i].getHely(), 102, 721);
+                PlaceChunck(tanulo[i].getSzuletes().toString(), 350, 721);
+                PlaceChunck(tanulo[i].getAnyanev(), 102, 698);
+                PlaceChunck(tanulo[i].getEvfolyam(), 102, 766);
+                PlaceChunck(tanulo[i].getBeirasinaplo(), 240, 766);
+                PlaceChunck(tanulo[i].getSornaploszam(), 350, 766);
+                PlaceChunck("magyar", 102, 677);
+                System.out.println("\n" + tanulo[i].getHely()+"\n");
 
                 //document.add(createFirstTable());
 

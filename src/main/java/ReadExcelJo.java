@@ -1,0 +1,547 @@
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfWriter;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
+
+/**
+ * Created by lbene on 17.08.2017.
+ */
+public class ReadExcelJo {
+
+    public Tanulo tanulo[] = new Tanulo[3400];
+    public int index;
+    //public String DEST = "/Users/istvan/Documents/kir/Telephelyek/CLASSIC/CSONGRÁD  Kossuth tér 6.         2017-2018. tanév.xls";
+    //public String DEST_CLASSIC = "/Users/istvan/GitHub/tableController/src/main/java/CLASSIC.xls";
+    //public String DEST_SZILVER = "/Users/istvan/GitHub/tableController/src/main/java/SZILVER.xls";
+    public int rossz;
+    public int nincsMeg;
+    public boolean egyoszlop = true;
+
+    public int ismetloIndex;
+    public int hibasTanuloIndex = 0;
+
+
+    public static final int sajatNev = 2;
+
+    int sajatAnya = 8;
+    int sajatSzuletes = 7;
+    int sajatAzonosito = 5;
+    int osztaly = 0;
+
+    public boolean datumcsere = true;
+
+    ///////////////////////////READ METÓDUS///////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+    public boolean readExceljo(String DEST, String szilverClassic) throws IOException {
+        rossz = 0;
+        nincsMeg = 0;
+        hibasTanuloIndex = 0;
+
+
+        if (egyoszlopos(DEST)){
+            System.out.println("Egy oszlopos");
+            sajatAnya = 7;
+            sajatSzuletes = 6;
+            sajatAzonosito = 4;
+            osztaly = -1;
+        }else{
+            System.out.println("Ket oszlopos");
+            sajatAnya = 8;
+            sajatSzuletes = 7;
+            sajatAzonosito = 5;
+            osztaly = 0;
+        }
+
+        WritePDF writePDF = new WritePDF();
+
+        try {
+
+            //
+            FileInputStream file = new FileInputStream(new File(DEST));
+            HSSFWorkbook workbook = new HSSFWorkbook(file);
+
+            FileInputStream fileExport = new FileInputStream(new File(szilverClassic));
+            HSSFWorkbook workbookExport = new HSSFWorkbook(fileExport);
+            HSSFSheet sheetExport = workbookExport.getSheetAt(0);
+
+            //HSSFSheet sheet = workbook.getSheetAt(1);
+
+            //System.out.println(workbook.getNumberOfSheets());
+
+
+
+            int i = 0; ///AZ i az a lapok indexe
+            //outerloop:
+            while(!workbook.getSheetName(i).contentEquals("Ö.2017.") && !workbook.getSheetName(i).contentEquals("Ö.2017")){
+                start:
+
+                for (int z = 0; z <3400; z++){
+                    tanulo[z] = new Tanulo();
+                }
+
+
+                HSSFSheet sheet = workbook.getSheetAt(i);
+                //System.out.println(workbook.getSheetName(i).toString());
+
+
+                index = 0; //tanulo indexe
+                // Ez egy lapon beluli sor indexe de 6-ot levag mert onnan kezdodnek a diakok ezert majd a diakok sorszama lesz
+                int j = 0; //ez az oszlop indexe
+                int kiszur = 5;
+                String sorszam = ""; //HA NULLA MARAD AZ HIBA
+                //////////////
+                /////VEGIG MEGYEK AZ EXCELLEN
+                ////////////
+                Row row;
+                //outerloop:
+                for (Iterator<Row> rowIterator = sheet.iterator(); rowIterator.hasNext();) {
+                    row = rowIterator.next();
+                    boolean hibasOM = false;
+                    index++;
+                    j = 0;
+                    if (index > kiszur){
+                        if (kiszur == 5) {
+                            index = 1;
+                        }
+                        kiszur = 0;
+
+
+                        if (row.cellIterator().hasNext()) {
+
+                            if (row.cellIterator().next().toString().contentEquals("")) {
+                                //System.out.println(row.cellIterator().next().toString());
+                                break;
+                            }
+                            String ellenorzo = row.cellIterator().next().toString();
+                            ellenorzo = ellenorzo.replace(".","");
+                            if (!isInteger(ellenorzo)){
+                                //System.out.println(row.cellIterator().next().toString());
+                                //System.out.println("BREAK");
+                                break;
+                            }
+
+                        }else{
+
+                            break;
+                        }
+
+
+
+
+
+                        ///////////VEGIG MEGYEK A SAJAT EXCEL sorain
+                        /////////////
+                        for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
+                            Cell cellData = cellIterator.next();
+                            //                            todo work with the data
+                            j++;
+                            //System.out.println(cellData.toString());
+
+//                                case 1:
+//                                    if (cellData.toString() == ""){
+//                                        System.out.println("BREAK " + index);
+//                                        break outerloop;
+//                                    }
+//                                    break;
+                            if (j == sajatAzonosito) {
+                                String string = cellData.toString();
+                                if (string.indexOf('.') != 0) {
+                                    string = string.replace(".", "");
+                                    string = string.replace("E10", "");
+                                    string = string.replace("E9", "");
+                                }
+
+
+                                tanulo[index].setAzonosito(string);
+                            }
+
+                            if (j == sajatNev) {
+                                tanulo[index].setNev(cellData.toString());
+                            }
+
+                            if (j == sajatAnya) {
+                                tanulo[index].setAnyanev(cellData.toString());
+                            }
+
+                            if (j == sajatSzuletes) {
+
+                                String string = cellData.toString();
+                                DateFormat format = new SimpleDateFormat("dd-MMM.-yyyy", Locale.ENGLISH);
+                                Date date = format.parse(string);
+                                System.out.println(date);
+
+                                tanulo[index].setSzuletes(date);
+                                //System.out.println(tanulo[index].getSzuletes().toCharArray());
+                            }
+
+                            if (j == 6 + osztaly){
+                                tanulo[index].setHely(cellData.toString());
+                            }
+
+                            if (j == 16 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Előképző 1");
+                                }
+                            }
+
+                            if (j == 17 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Előképző 2");
+                                }
+                            }
+
+                            if (j == 18 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Alap 1");
+                                }
+                            }
+
+                            if (j == 19 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Alap 2");
+                                }
+                            }
+
+                            if (j == 20 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Alap 3");
+                                }
+                            }
+
+                            if (j == 21 + osztaly){
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Alap 4");
+                                }
+                            }
+
+                            if (j == 22 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Alap 5");
+                                }
+                            }
+
+                            if (j == 23 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Alap 6");
+                                }
+                            }
+
+                            if (j == 24 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Továbbképző 7");
+                                }
+                            }
+
+                            if (j == 25 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Továbbképző 8");
+                                }
+                            }
+
+                            if (j == 26 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Továbbképző 9");
+                                }
+                            }
+
+                            if (j == 27 + osztaly) {
+                                if (cellData.toString() != "") {
+                                    tanulo[index].setEvfolyam("Továbbképző 10");
+                                }
+                            }
+
+                            if (j == 28 + osztaly) {
+                                tanulo[index].setSornaploszam(index + "/" + cellData.toString());
+                                sorszam = "";
+                            }
+
+                            if (j == 32 + osztaly) {
+                                tanulo[index].setBeirasinaplo(cellData.toString());
+                                //System.out.println(cellData.toString());
+                            }
+
+                        }
+
+
+
+
+
+                    }
+
+                }
+
+                //System.out.println(i);
+
+                if (i == workbook.getNumberOfSheets() - 1){
+                    if (!workbook.getSheetName(i).contentEquals("Ö.2017.")) {
+                        System.out.println("Ebben az excelbe nem létezik Ö.2017. lap");
+                        System.out.println("Az utolso lap neve: " + workbook.getSheetName(i));
+                    }
+                    break;
+                }
+
+                if (workbook.getSheetName(i).contentEquals("Ki2017.")){
+                    break;
+                }
+
+
+                File dir_proba = new File("/Users/istvan/Documents/kir/torzslapok_proba/" + workbook.getSheetName(i));
+                dir_proba.mkdir();
+
+                ModifyPDF modifyPDF = new ModifyPDF();
+                if (modifyPDF.modify(tanulo, index, dir_proba.getPath())){
+                    System.out.println("KESZ");
+                }
+
+                File dir = new File("/Users/istvan/Documents/kir/torzslapok/" + workbook.getSheetName(i));
+                dir.mkdir();
+
+
+                //EGY PDF-be iras
+                WritePDF_in_one_pdf writePDF_in_one_pdf = new WritePDF_in_one_pdf();
+                if (writePDF_in_one_pdf.write(tanulo, index, dir.getAbsolutePath(), workbook.getSheetName(i))){
+                    System.out.println(workbook.getSheetName(i) + " osztaly kesz");
+                }
+
+
+                ////KULON PDF-be etszik
+//                if (writePDF.write(tanulo,index, dir.getAbsolutePath())){
+//                    System.out.println(workbook.getSheetName(i) + " osztaly kesz");
+//                }
+                i++; //lapszam
+
+            }
+            //for (int i = 0; i < workbook.getNumberOfSheets(); i++){
+
+
+
+
+
+
+
+
+
+
+
+
+            file.close();
+            fileExport.close();
+            return true;
+        }
+        catch (Exception exception) {
+
+            System.out.println("PROGRAM HIBA: " + exception);
+        }
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////
+    ////////////////////////READ VÉGE//////////////////////////////
+    ///////////////////////////////////////////////////////////////
+
+    public static String replaceAtTheEnd(String input){
+        input = input.replaceAll("\\s+$", "");
+        return input;
+    }
+
+    /////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////
+    // LETEZIK MAR
+
+    public boolean letezikeMar(String string, int index){
+        boolean nemLetezik =  true;
+
+        for (int i = 1; i < index; i++){
+            if (tanulo[i].getAzonosito().toString().contentEquals(string) &&
+                    !tanulo[index].getNev().toString().contentEquals(tanulo[i].getNev().toString())){
+                ismetloIndex = i;
+                nemLetezik = false;
+            }
+        }
+
+        if (!nemLetezik){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    /////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////
+    ///// ISINTEGER
+
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
+    /////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////
+    ////   EGYOSZLOPOS
+
+
+    public boolean egyoszlopos(String DEST) throws IOException {
+        FileInputStream file = new FileInputStream(new File(DEST));
+        HSSFWorkbook workbook = new HSSFWorkbook(file);
+        HSSFSheet sheet = workbook.getSheetAt(0);
+        boolean az = false;
+        int kiszur = 7;
+        int sajatIndex= 0;
+
+        overloop:
+        for (Iterator<Row> rowIterator = sheet.iterator(); rowIterator.hasNext();) {
+            Row row = rowIterator.next();
+            int j = 0;
+            sajatIndex++;
+            if (sajatIndex > kiszur) {
+                if (kiszur == 5) {
+                    sajatIndex= 1;
+                }
+                kiszur = 0;
+
+
+                for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
+                    j++;
+                    Cell cellData = cellIterator.next();
+                    if (j == 4) {
+                        if (cellData.toString().length() > 4) {
+                            //System.out.println(cellData.toString());
+                            az = true;
+                            return az;
+                        }
+                        return az;
+                    }
+                }
+            }
+        }
+        file.close();
+
+        if (az){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////
+    ///// KIRELLENORZES
+
+    public boolean KIRellenorzes(HSSFSheet sheetExport, WriteExcel writeExcel, int i, String DEST) throws IOException {
+        boolean megvan = false;
+        for (Iterator<Row> rowExportIterator = sheetExport.iterator(); rowExportIterator.hasNext();){
+            Row rowExport = rowExportIterator.next();
+
+            String azonositoExport = rowExport.cellIterator().next().toString();
+
+            //string.indexOf('a')
+
+            //////ITT KELL ELLENORIZNI HOGY HIBASE
+            if (azonositoExport.contentEquals(tanulo[index].getAzonosito()) && !tanulo[index].isHibas()){
+                megvan = true;
+                //System.out.println(index + " " + tanulo[index].getAzonosito());
+                int k = 0;
+                for (Iterator<Cell> cellExportIterator = rowExport.cellIterator(); cellExportIterator.hasNext(); ) {
+                    Cell cellExportData = cellExportIterator.next();
+                    k++;
+
+                    switch (k) {
+                        case 2:
+
+                            if (!cellExportData.toString().contentEquals(tanulo[index].getNev())) {
+                                rossz++;
+                                String kirAdat = cellExportData.toString();
+                                System.out.println("\nHibás név:");
+                                System.out.println("KIR: " + kirAdat + "\nGABI: " + tanulo[index].getNev());
+                                System.out.println("Nem egyezik: " + tanulo[index].getAzonosito() + "\n");
+                                //kirAdat += " JAVITVA";
+                                //System.out.println(index);
+                                //Az indexhez annyit kell hozzaadni amennyivel csuszik a sorszam az excelhez kepest
+
+
+                            }
+                            break;
+
+                        case 3:
+                            if (!cellExportData.toString().contentEquals(tanulo[index].getAnyanev())) {
+                                rossz++;
+                                String kirAdat = cellExportData.toString();
+                                System.out.println("\nHibás Anyja neve:");
+                                System.out.println("KIR: " + kirAdat + "\nGABI: " + tanulo[index].getAnyanev());
+                                System.out.println("Nem egyezik: " + tanulo[index].getAzonosito() + "\n");
+                                //kirAdat += " JAVITVA";
+                                //System.out.println(index);
+                                //Az indexhez annyit kell hozzaadni amennyivel csuszik a sorszam az excelhez kepest
+
+                            }
+                            break;
+
+                        case 4:
+//                                                String datum = cellExportData.toString();
+//                                                String nap;
+//                                                String honap;
+//                                                String ev;
+//                                                String datum_KIR_jo;
+//
+//                                                ev = datum.substring(0, datum.indexOf('.'));
+//                                                datum = datum.replace(ev + ".", "");
+//
+//                                                honap = datum.substring(1, datum.indexOf('.'));
+//                                                datum = datum.replace(ev + ".", "");
+//
+//                                                nap = datum.substring(1, datum.indexOf('.'));
+//
+//                                                datum_KIR_jo = ev + "/" + honap + "/" + nap;
+//                                                //System.out.println(datum_KIR_jo + " " + (index+5) + " " + i);
+                            //System.out.print(".");
+                            if (datumcsere  && cellExportIterator.hasNext()) {
+
+                                //System.out.println(".");
+                            }
+
+                            break;
+
+                    }
+                }
+
+            }else{
+                // System.out.println("");
+            }
+
+
+            //if (cellExportData.toString() != tanulo[index].get)
+        }
+
+
+        if (!megvan && !tanulo[index].isHibas()){
+            nincsMeg++;
+            tanulo[index].setHibas(true);
+
+            //hibasTanuloIndex++;
+            System.out.println("Nem talaltam meg az exportba: \n" + tanulo[index].getNev() +
+                    "\n" + tanulo[index].getAzonosito() + "\n");
+        }
+        return true;
+    }
+
+
+}
+

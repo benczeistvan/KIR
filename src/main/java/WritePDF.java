@@ -9,12 +9,15 @@ public class WritePDF {
 
     PdfWriter writer;
 
-    public boolean write(ReadExcel readExcel){
+    public boolean write(Tanulo tanulo[], int meret, String DESTINATION){
 
-        System.out.println("ennyi gyerkőc van: " + readExcel.index);
+
+
+
+        //System.out.println("ennyi gyerkőc van: " + readExcel.index);
         //eddig kell majd hivatalosan menjen: readExcel.index
-        for (int i = 1; i <= 2; i++) {
-            String filename = i + ". " + readExcel.tanulo[i].getAzonosito() + ".pdf";
+        for (int i = 1; i <= meret; i++) {
+            String filename = DESTINATION + "/" + i + ". " + tanulo[i].getNev() + ".pdf";
             Document document = new Document(PageSize.A4);
             try {
                 writer = PdfWriter.getInstance(document, new FileOutputStream(filename));
@@ -22,29 +25,20 @@ public class WritePDF {
                 document.open();
 
 
-                //A4 meret: 595x842
-                PlaceChunck(readExcel.tanulo[i].getNev(), 100, 744);
-                //PlaceChunck(readExcel.tanulo[i].getAzonosito(), 200, 196);
-                //PlaceChunck(readExcel.tanulo[i].getHely(), 200, 196);
-                //PlaceChunck(readExcel.tanulo[i].getSzuletes(), 200, 196);
-                //PlaceChunck(readExcel.tanulo[i].getAnyanev(), 200, 196);
+                PlaceChunck(tanulo[i].getNev(), 100, 744);
+                PlaceChunck(tanulo[i].getAzonosito(), 350, 746);
+                PlaceChunck(tanulo[i].getHely(), 100, 722);
+                PlaceChunck(tanulo[i].getSzuletes().toString(), 350, 718);
+                PlaceChunck(tanulo[i].getAnyanev(), 100, 698);
+                PlaceChunck(tanulo[i].getEvfolyam(), 100, 766);
+                PlaceChunck(tanulo[i].getBeirasinaplo(), 240, 766);
+                PlaceChunck(tanulo[i].getSornaploszam(), 350, 766);
+                PlaceChunck("magyar", 100, 677);
+
+                System.out.println("\n" + tanulo[i].getHely()+"\n");
 
 
-
-                //PlaceChunck(readExcel.tanulo[1].getNev(),500,600);
-
-
-                //Paragraph nev = new Paragraph();
-                //nev.add("Bencze Istvan");
-                //nev.setLeading(30,0); //lefele allitom
-                //nev.setAlignment(Element.ALIGN_CENTER);
-
-                //Paragraph anev = new Paragraph();
-                //anev.add("Kovacs Katalin");
-
-                //document.add(nev);
-                //document.add(anev);
-                document.add(createFirstTable());
+                //document.add(createFirstTable());
 
 
                 document.close();
@@ -60,7 +54,7 @@ public class WritePDF {
         PdfContentByte cb = writer.getDirectContent();
         BaseFont bf = null;
         try {
-            bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -81,46 +75,7 @@ public class WritePDF {
         PdfPTable table = new PdfPTable(4);
         //table.getDefaultCell().setBorderWidth(0f);
 
-        //table.getDefaultCell().setBorderColor(Color.WHITE);
 
-
-        //PdfCell cell = new PdfCell("");
-
-//        // a long phrase
-//        Phrase p = new Phrase(
-//                "Dr. iText or: How I Learned to Stop Worrying and Love PDF.");
-//        PdfPCell cell = new PdfPCell(p);
-//        // the prhase is wrapped
-//        table.addCell("wrap");
-//        cell.setNoWrap(false);
-//        table.addCell(cell);
-//        // the phrase isn't wrapped
-//        table.addCell("no wrap");
-//        cell.setNoWrap(true);
-//        table.addCell(cell);
-//        // a long phrase with newlines
-//        p = new Phrase(
-//                "Dr. iText or:\nHow I Learned to Stop Worrying\nand Love PDF.");
-//        cell = new PdfPCell(p);
-//        // the phrase fits the fixed height
-//        table.addCell("fixed height (more than sufficient)");
-//        cell.setFixedHeight(72f);
-//
-//
-//        table.addCell(cell);
-//        // the phrase doesn't fit the fixed height
-//        table.addCell("fixed height (not sufficient)");
-//        cell.setFixedHeight(36f);
-//        table.addCell(cell);
-//        // The minimum height is exceeded
-//        table.addCell("minimum height");
-//        cell = new PdfPCell(new Phrase("Dr. iText"));
-//        cell.setMinimumHeight(36f);
-//        table.addCell(cell);
-//        // The last row is extended
-//        table.setExtendLastRow(true);
-//        table.addCell("extend last row");
-//        table.addCell(cell);
 
 
 

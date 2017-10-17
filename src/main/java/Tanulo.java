@@ -1,25 +1,36 @@
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Tanulo {
     String azonosito;
     String nev;
     String anyanev;
-    String szuletes;
+    Date szuletes;
     String hely;
     String evfolyam;
     String beirasinaplo;
     String sornaploszam;
+    boolean hibas;
+    int lapszam;
+    int sorszam;
 
     public Tanulo(){
         this.azonosito = "";
         this.nev = "";
         this.nev = "";
         this.anyanev = "";
-        this.szuletes = "";
+        //this.szuletes = "";
         this.hely = "";
         this.evfolyam = "";
         this.beirasinaplo = "";
         this.sornaploszam = "";
+        this.hibas = false;
+        this.lapszam = 0;
+        this.sorszam = 0;
+
     }
 
     public String getAzonosito() {
@@ -46,11 +57,11 @@ public class Tanulo {
         this.anyanev = anyanev;
     }
 
-    public String getSzuletes() {
+    public Date getSzuletes() {
         return szuletes;
     }
 
-    public void setSzuletes(String szuletes) {
+    public void setSzuletes(Date szuletes) {
         this.szuletes = szuletes;
     }
 
@@ -84,5 +95,29 @@ public class Tanulo {
 
     public void setSornaploszam(String sornaploszam) {
         this.sornaploszam = sornaploszam;
+    }
+
+    public boolean isHibas() {
+        return hibas;
+    }
+
+    public void setHibas(boolean hibas) {
+        this.hibas = hibas;
+    }
+
+    public int getLapszam() {
+        return lapszam;
+    }
+
+    public void setLapszam(int lapszam) {
+        this.lapszam = lapszam;
+    }
+
+    public int getSorszam() {
+        return sorszam;
+    }
+
+    public void setSorszam(int sorszam) {
+        this.sorszam = sorszam;
     }
 }

@@ -6,6 +6,7 @@ import org.apache.poi.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -16,6 +17,13 @@ public class ReadExcel {
     public Tanulo tanulo[] = new Tanulo[3400];
     public int index;
     public String DEST = "/Users/istvan/GitHub/KIR/BAKS.xls";
+
+
+    public static final int sajatNev = 2;
+
+    int sajatAnya = 8;
+    int sajatSzuletes = 7;
+    int sajatAzonosito = 5;
 
     public boolean read() {
         try {
@@ -28,6 +36,19 @@ public class ReadExcel {
 
             for (int i = 0; i <3400; i++){
                 tanulo[i] = new Tanulo();
+            }
+
+
+            if (egyoszlopos(DEST)){
+                System.out.println("Egy oszlopos");
+                sajatAnya = 7;
+                sajatSzuletes = 6;
+                sajatAzonosito = 4;
+            }else{
+                System.out.println("Ket oszlopos");
+                sajatAnya = 8;
+                sajatSzuletes = 7;
+                sajatAzonosito = 5;
             }
 
 
@@ -66,7 +87,7 @@ public class ReadExcel {
                                 tanulo[index].setAnyanev(cellData.toString());
                                 break;
                             case 7:
-                                tanulo[index].setSzuletes(cellData.toString());
+                                //tanulo[index].setSzuletes(cellData.toString());
                                 break;
                             case 6:
                                 tanulo[index].setHely(cellData.toString());
@@ -165,4 +186,50 @@ public class ReadExcel {
 
         return false;
     }
+
+
+
+    public boolean egyoszlopos(String DEST) throws IOException {
+        FileInputStream file = new FileInputStream(new File(DEST));
+        HSSFWorkbook workbook = new HSSFWorkbook(file);
+        HSSFSheet sheet = workbook.getSheetAt(0);
+        boolean az = false;
+        int kiszur = 7;
+        int sajatIndex= 0;
+
+        overloop:
+        for (Iterator<Row> rowIterator = sheet.iterator(); rowIterator.hasNext();) {
+            Row row = rowIterator.next();
+            int j = 0;
+            sajatIndex++;
+            if (sajatIndex > kiszur) {
+                if (kiszur == 5) {
+                    sajatIndex= 1;
+                }
+                kiszur = 0;
+
+
+                for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
+                    j++;
+                    Cell cellData = cellIterator.next();
+                    if (j == 4) {
+                        if (cellData.toString().length() > 4) {
+                            //System.out.println(cellData.toString());
+                            az = true;
+                            return az;
+                        }
+                        return az;
+                    }
+                }
+            }
+        }
+        file.close();
+
+        if (az){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
