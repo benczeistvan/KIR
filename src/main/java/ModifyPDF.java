@@ -13,6 +13,7 @@ public class ModifyPDF {
     public boolean modify(Tanulo tanulo[], int index, String DESTINATION){
 
         int font_size = 12;
+        int font_size_small = 11;
 
         //eddig kell majd hivatalosan menjen: readExcel.index
         //FIGYELEM AZ INDEXELES ONNAN KEZDODIK AMIKOR vannak adatok javitas folyamatban
@@ -34,22 +35,22 @@ public class ModifyPDF {
                 //A4 meret: 595x842
 
 
-                if (tanulo[i].getNev().toString().length() > 25){
-                    PlaceChunck(tanulo[i].getNev(), 96, 744, 10);
+                if (tanulo[i].getNev().toString().length() > 24){
+                    PlaceChunck(tanulo[i].getNev(), 96, 744, font_size_small);
                 }else{
-                    PlaceChunck(tanulo[i].getNev(), 102, 744, 12);
+                    PlaceChunck(tanulo[i].getNev(), 102, 744, font_size);
                 }
 
-                if (tanulo[i].getAnyanev().toString().length() > 25){
-                    PlaceChunck(tanulo[i].getAnyanev(), 96, 698, 10);
+                if (tanulo[i].getAnyanev().toString().length() > 24){
+                    PlaceChunck(tanulo[i].getAnyanev(), 96, 698, font_size_small);
                 }else{
-                    PlaceChunck(tanulo[i].getAnyanev(), 102, 698, 12);
+                    PlaceChunck(tanulo[i].getAnyanev(), 102, 698, font_size);
                 }
 
                 if (tanulo[i].getHely().toString().length() > 17){
-                    PlaceChunck(tanulo[i].getHely(), 96, 721, 10);
+                    PlaceChunck(tanulo[i].getHely(), 96, 721, font_size_small);
                 }else{
-                    PlaceChunck(tanulo[i].getHely(), 102, 721, 12);
+                    PlaceChunck(tanulo[i].getHely(), 102, 721, font_size);
                 }
 
 
