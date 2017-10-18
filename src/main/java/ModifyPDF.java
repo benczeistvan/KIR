@@ -12,7 +12,8 @@ public class ModifyPDF {
 
     public boolean modify(Tanulo tanulo[], int index, String DESTINATION){
 
-        System.out.println("ennyi gyerkőc van: " + index);
+        int font_size = 12;
+
         //eddig kell majd hivatalosan menjen: readExcel.index
         //FIGYELEM AZ INDEXELES ONNAN KEZDODIK AMIKOR vannak adatok javitas folyamatban
         for (int i = 1; i <= index; i++) {
@@ -31,16 +32,37 @@ public class ModifyPDF {
                 cb.addTemplate(page, 0, 0);
 
                 //A4 meret: 595x842
-                PlaceChunck(tanulo[i].getNev(), 102, 744);
-                PlaceChunck(tanulo[i].getAzonosito(), 350, 746);
-                PlaceChunck(tanulo[i].getHely(), 102, 721);
-                PlaceChunck(tanulo[i].getSzuletes().toString(), 350, 721);
-                PlaceChunck(tanulo[i].getAnyanev(), 102, 698);
-                PlaceChunck(tanulo[i].getEvfolyam(), 102, 766);
-                PlaceChunck(tanulo[i].getBeirasinaplo(), 240, 766);
-                PlaceChunck(tanulo[i].getSornaploszam(), 350, 766);
-                PlaceChunck("magyar", 102, 677);
-                System.out.println("\n" + tanulo[i].getHely()+"\n");
+
+
+                if (tanulo[i].getNev().toString().length() > 25){
+                    PlaceChunck(tanulo[i].getNev(), 96, 744, 10);
+                }else{
+                    PlaceChunck(tanulo[i].getNev(), 102, 744, 12);
+                }
+
+                if (tanulo[i].getAnyanev().toString().length() > 25){
+                    PlaceChunck(tanulo[i].getAnyanev(), 96, 698, 10);
+                }else{
+                    PlaceChunck(tanulo[i].getAnyanev(), 102, 698, 12);
+                }
+
+                if (tanulo[i].getHely().toString().length() > 17){
+                    PlaceChunck(tanulo[i].getHely(), 96, 721, 10);
+                }else{
+                    PlaceChunck(tanulo[i].getHely(), 102, 721, 12);
+                }
+
+
+                //PlaceChunck(tanulo[i].getNev(), 102, 744);
+                PlaceChunck(tanulo[i].getAzonosito(), 350, 746, 12);
+                //PlaceChunck(tanulo[i].getHely(), 102, 721);
+                PlaceChunck(tanulo[i].getSzuletes().toString(), 350, 721, 12);
+                //PlaceChunck(tanulo[i].getAnyanev(), 102, 698);
+                PlaceChunck(tanulo[i].getEvfolyam(), 102, 766, 12);
+                PlaceChunck(tanulo[i].getBeirasinaplo(), 245, 766, 12);
+                PlaceChunck(tanulo[i].getSornaploszam(), 350, 766, 12);
+                PlaceChunck("magyar", 102, 677, 12);
+
 
                 //document.add(createFirstTable());
 
@@ -54,7 +76,7 @@ public class ModifyPDF {
         return true;
     }
 
-    private void PlaceChunck(String text, int x, int y) {
+    private void PlaceChunck(String text, int x, int y, int font_size) {
         PdfContentByte cb = writer.getDirectContent();
         BaseFont bf = null;
         try {
@@ -67,7 +89,7 @@ public class ModifyPDF {
         cb.saveState();
         cb.beginText();
         cb.moveText(x, y);
-        cb.setFontAndSize(bf, 12);
+        cb.setFontAndSize(bf, font_size);
         cb.showText(text);
         cb.endText();
         cb.restoreState();

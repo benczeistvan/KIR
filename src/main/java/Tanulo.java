@@ -10,6 +10,7 @@ public class Tanulo {
     String nev;
     String anyanev;
     Date szuletes;
+    String szuletes_KIR;
     String hely;
     String evfolyam;
     String beirasinaplo;
@@ -24,6 +25,7 @@ public class Tanulo {
         this.nev = "";
         this.anyanev = "";
         //this.szuletes = "";
+        this.szuletes = new Date(2000, 01,01);
         this.hely = "";
         this.evfolyam = "";
         this.beirasinaplo = "";
@@ -31,6 +33,7 @@ public class Tanulo {
         this.hibas = false;
         this.lapszam = 0;
         this.sorszam = 0;
+        this.szuletes_KIR = "";
 
     }
 
@@ -120,5 +123,13 @@ public class Tanulo {
 
     public void setSorszam(int sorszam) {
         this.sorszam = sorszam;
+    }
+
+    public String getSzuletes_KIR() {
+        return szuletes_KIR;
+    }
+
+    public void setSzuletes_KIR(String szuletes_KIR) {
+        this.szuletes_KIR = szuletes_KIR;
     }
 }

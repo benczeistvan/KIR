@@ -47,6 +47,9 @@ public class ReadExcelJo {
         nincsMeg = 0;
         hibasTanuloIndex = 0;
 
+        boolean vanBenneHiba = false;
+        boolean vanBenneHibaNagy = false;
+
 
         if (egyoszlopos(DEST)){
             System.out.println("Egy oszlopos");
@@ -82,7 +85,8 @@ public class ReadExcelJo {
 
             int i = 0; ///AZ i az a lapok indexe
             //outerloop:
-            while(!workbook.getSheetName(i).contentEquals("Ö.2017.") && !workbook.getSheetName(i).contentEquals("Ö.2017")){
+            while(!workbook.getSheetName(i).contentEquals("Ö.2017.") && !workbook.getSheetName(i).contentEquals("Ö.2017") &&
+                    !workbook.getSheetName(i).contentEquals("Gyv.2017.")){
                 start:
 
                 for (int z = 0; z <3400; z++){
@@ -166,20 +170,20 @@ public class ReadExcelJo {
                             }
 
                             if (j == sajatNev) {
-                                tanulo[index].setNev(cellData.toString());
+                                tanulo[index].setNev(capitalizeString(cellData.toString().toLowerCase()));
                             }
 
                             if (j == sajatAnya) {
-                                tanulo[index].setAnyanev(cellData.toString());
+                                tanulo[index].setAnyanev(capitalizeString(cellData.toString().toLowerCase()));
                             }
 
                             if (j == sajatSzuletes) {
-                                tanulo[index].setSzuletes(cellData.getDateCellValue());
-                                //System.out.println(tanulo[index].getSzuletes().toCharArray());
+                                //tanulo[index].setSzuletes(cellData.getDateCellValue());
+                                tanulo[index].setSzuletes_KIR(cellData.toString());
                             }
 
                             if (j == 6 + osztaly){
-                                tanulo[index].setHely(cellData.toString());
+                                tanulo[index].setHely(capitalizeString(cellData.toString().toLowerCase()));
                             }
 
                             if (j == 16 + osztaly) {
@@ -289,22 +293,26 @@ public class ReadExcelJo {
                 }
 
 
-                File dir_proba = new File("/Users/istvan/Documents/kir/torzslapok_proba/" + workbook.getSheetName(i));
+                File dir_proba = new File("/Users/istvan/Documents/kir/torzslapok_proba/" + i + ". " +workbook.getSheetName(i));
                 dir_proba.mkdir();
 
                 ModifyPDF modifyPDF = new ModifyPDF();
                 if (modifyPDF.modify(tanulo, index, dir_proba.getPath())){
-                    System.out.println("KESZ");
+                    //System.out.println("KESZ\n\n");
                 }
 
-                File dir = new File("/Users/istvan/Documents/kir/torzslapok/" + workbook.getSheetName(i));
+                File dir = new File("/Users/istvan/Documents/kir/torzslapok/" + i + ". " + workbook.getSheetName(i));
                 dir.mkdir();
 
 
                 //EGY PDF-be iras
                 WritePDF_in_one_pdf writePDF_in_one_pdf = new WritePDF_in_one_pdf();
-                if (writePDF_in_one_pdf.write(tanulo, index, dir.getAbsolutePath(), workbook.getSheetName(i))){
-                    System.out.println(workbook.getSheetName(i) + " osztaly kesz");
+                if (writePDF_in_one_pdf.write(tanulo, index, dir.getAbsolutePath(), workbook.getSheetName(i), vanBenneHiba)){
+                    System.out.println(workbook.getSheetName(i) + " osztaly kesz\n");
+                }else{
+                    vanBenneHiba = true;
+                    System.out.println(workbook.getSheetName(i) + " HIBAS osztaly kesz\n");
+                    vanBenneHibaNagy = true;
                 }
 
 
@@ -313,6 +321,7 @@ public class ReadExcelJo {
 //                    System.out.println(workbook.getSheetName(i) + " osztaly kesz");
 //                }
                 i++; //lapszam
+                vanBenneHiba = false;
 
             }
             //for (int i = 0; i < workbook.getNumberOfSheets(); i++){
@@ -322,7 +331,13 @@ public class ReadExcelJo {
 
 
 
-
+            if (vanBenneHibaNagy){
+                System.out.println("Vigyázat van hibás Adat!!!");
+                vanBenneHiba = false;
+            }else{
+                System.out.println("MINDEN RENDBEN!");
+                vanBenneHiba = false;
+            }
 
 
 
@@ -534,6 +549,24 @@ public class ReadExcelJo {
                     "\n" + tanulo[index].getAzonosito() + "\n");
         }
         return true;
+    }
+
+
+
+
+    ////////szojavito
+    public static String capitalizeString(String string) {
+        char[] chars = string.toLowerCase().toCharArray();
+        boolean found = false;
+        for (int i = 0; i < chars.length; i++) {
+            if (!found && Character.isLetter(chars[i])) {
+                chars[i] = Character.toUpperCase(chars[i]);
+                found = true;
+            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') { // You can add other chars here
+                found = false;
+            }
+        }
+        return String.valueOf(chars);
     }
 
 
