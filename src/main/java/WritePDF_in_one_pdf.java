@@ -80,7 +80,7 @@ public class WritePDF_in_one_pdf {
                 if (tanulo[i].getNev().toString().length() > 24){
                     PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), 98, 744, font_size_small);
                     System.out.println(tanulo[i].getNev() + " Túl hosszú név");
-                    if (tanulo[i].getNev().toString().length() > 26){
+                    if (tanulo[i].getNev().toString().length() > 27){
                         System.out.println("FIGYELEM EXTRA HOSSZÚ NÉV");
                         vanBennehiba = true;
                     }
@@ -113,6 +113,16 @@ public class WritePDF_in_one_pdf {
                     }
                 }else{
                     PlaceChunck(writer, tanulo[i].getHely(), 102, 721, font_size);
+                }
+
+
+                String datum_check = tanulo[i].getSzuletes_KIR().toString();
+                datum_check=datum_check.replaceAll("[*0-9]", "");
+                datum_check=datum_check.replaceAll(".", "");
+                datum_check=datum_check.replaceAll(" ", "");
+                if (datum_check.length() > 1){
+                    System.out.println("Hibas datum: " + tanulo[i].getSzuletes_KIR() + " " + tanulo[i].getNev() + " " + tanulo[i].getAzonosito());
+                    vanBennehiba = true;
                 }
 
 
