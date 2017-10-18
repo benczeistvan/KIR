@@ -292,6 +292,7 @@ public class ReadExcelJo {
                     break;
                 }
 
+                System.out.println(workbook.getSheetName(i) + " osztaly:");
 
                 File dir_proba = new File("/Users/istvan/Documents/kir/torzslapok_proba/" + i + ". " +workbook.getSheetName(i));
                 dir_proba.mkdir();
@@ -308,10 +309,10 @@ public class ReadExcelJo {
                 //EGY PDF-be iras
                 WritePDF_in_one_pdf writePDF_in_one_pdf = new WritePDF_in_one_pdf();
                 if (writePDF_in_one_pdf.write(tanulo, index, dir.getAbsolutePath(), workbook.getSheetName(i), vanBenneHiba)){
-                    System.out.println(workbook.getSheetName(i) + " osztaly kesz\n");
+                    System.out.println(workbook.getSheetName(i) + " osztaly kesz\n\n");
                 }else{
                     vanBenneHiba = true;
-                    System.out.println(workbook.getSheetName(i) + " HIBAS osztaly kesz\n");
+                    System.out.println(workbook.getSheetName(i) + " HIBAS osztaly kesz\n\n");
                     vanBenneHibaNagy = true;
                 }
 

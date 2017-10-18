@@ -28,8 +28,14 @@ public class WritePDF_in_one_pdf {
         int font_size_small = 11;
         //System.out.println("ennyi gyerkőc van: " + readExcel.index);
         //eddig kell majd hivatalosan menjen: readExcel.index
-        for (int i = 1; i < meret; i++) {
+        for (int i = 1; i <= meret; i++) {
 
+            if (i == meret)
+                if (tanulo[i].getNev().toString().length() == 0){
+                break;
+            }else{
+                System.out.println("ELLENORIZD, utolso tanulo: " + tanulo[i].getNev());
+            }
 
             try {
 

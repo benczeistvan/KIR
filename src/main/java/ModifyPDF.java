@@ -18,6 +18,14 @@ public class ModifyPDF {
         //eddig kell majd hivatalosan menjen: readExcel.index
         //FIGYELEM AZ INDEXELES ONNAN KEZDODIK AMIKOR vannak adatok javitas folyamatban
         for (int i = 1; i <= index; i++) {
+
+            if (i == index){
+                if ( tanulo[i].getNev().toString().length() == 0)
+                break;
+            }else{
+                //System.out.println("ELLENORIZD " + i);
+            }
+
             String filename = DESTINATION + "/" + i + ". " + tanulo[i].getNev() + ".pdf";
             Document document = new Document(PageSize.A4);
 
