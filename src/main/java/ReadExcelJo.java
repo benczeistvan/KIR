@@ -50,8 +50,9 @@ public class ReadExcelJo {
         boolean vanBenneHiba = false;
         boolean vanBenneHibaNagy = false;
 
+        int i = 0; ///AZ i az a lapok indexe
 
-        if (egyoszlopos(DEST)){
+        if (egyoszlopos(DEST, i)){
             System.out.println("Egy oszlopos");
             sajatAnya = 7;
             sajatSzuletes = 6;
@@ -83,7 +84,7 @@ public class ReadExcelJo {
 
 
 
-            int i = 0; ///AZ i az a lapok indexe
+
             //outerloop:
             while(!workbook.getSheetName(i).contentEquals("Ö.2017.") && !workbook.getSheetName(i).contentEquals("Ö.2017") &&
                     !workbook.getSheetName(i).contentEquals("Gyv.2017.")){
@@ -165,6 +166,9 @@ public class ReadExcelJo {
                                     string = string.replace("E9", "");
                                 }
 
+                                while (string.length() != 11 && string.length() > 4) {
+                                    string += "0";
+                                }
 
                                 tanulo[index].setAzonosito(string);
                             }
@@ -294,7 +298,7 @@ public class ReadExcelJo {
 
                 System.out.println(workbook.getSheetName(i) + " osztaly:");
 
-                File dir_proba = new File("/Users/istvan/Documents/kir/torzslapok_proba/" + i + ". " +workbook.getSheetName(i));
+                File dir_proba = new File("/Users/istvan/Documents/kir/torzslapok_proba/" + (i+1) + ". " +workbook.getSheetName(i));
                 dir_proba.mkdir();
 
                 ModifyPDF modifyPDF = new ModifyPDF();
@@ -302,7 +306,7 @@ public class ReadExcelJo {
                     //System.out.println("KESZ\n\n");
                 }
 
-                File dir = new File("/Users/istvan/Documents/kir/torzslapok/" + i + ". " + workbook.getSheetName(i));
+                File dir = new File("/Users/istvan/Documents/kir/torzslapok/" + (i+1) + ". " + workbook.getSheetName(i));
                 dir.mkdir();
 
 
@@ -408,10 +412,10 @@ public class ReadExcelJo {
     ////   EGYOSZLOPOS
 
 
-    public boolean egyoszlopos(String DEST) throws IOException {
+    public boolean egyoszlopos(String DEST, int honnan) throws IOException {
         FileInputStream file = new FileInputStream(new File(DEST));
         HSSFWorkbook workbook = new HSSFWorkbook(file);
-        HSSFSheet sheet = workbook.getSheetAt(0);
+        HSSFSheet sheet = workbook.getSheetAt(honnan);
         boolean az = false;
         int kiszur = 7;
         int sajatIndex= 0;

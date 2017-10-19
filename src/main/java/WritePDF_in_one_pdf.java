@@ -87,7 +87,7 @@ public class WritePDF_in_one_pdf {
                     PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), 98, 744, font_size_small);
                     System.out.println(tanulo[i].getNev() + " Túl hosszú név");
                     if (tanulo[i].getNev().toString().length() > 27){
-                        System.out.println("FIGYELEM EXTRA HOSSZÚ NÉV");
+                        System.out.println("FIGYELEM EXTRA HOSSZÚ NÉV: " + tanulo[i].getNev() + "\n");
                         vanBennehiba = true;
                     }
                 }else{
@@ -100,7 +100,7 @@ public class WritePDF_in_one_pdf {
                     System.out.println(tanulo[i].getAnyanev() + " Túl hosszú Anya név");
                     PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), 98, 698, font_size_small);
                     if (tanulo[i].getAnyanev().toString().length() > 26){
-                        System.out.println("FIGYELEM EXTRA HOSSZÚ ANYA NÉV");
+                        System.out.println("FIGYELEM EXTRA HOSSZÚ ANYA NÉV" + tanulo[i].getAnyanev() + "\n");
                         vanBennehiba = true;
                     }
                 }else{
@@ -112,9 +112,9 @@ public class WritePDF_in_one_pdf {
 
                 if (tanulo[i].getHely().toString().length() > 16){
                     PlaceChunck(writer, tanulo[i].getHely(), 98, 721, font_size_small);
-                    System.out.println(tanulo[i].getAnyanev() + " Túl hosszú város");
-                    if (tanulo[i].getNev().toString().length() > 18){
-                        System.out.println("FIGYELEM EXTRA HOSSZÚ VÁROS NÉV");
+                    System.out.println(tanulo[i].getHely() + " Túl hosszú város");
+                    if (tanulo[i].getNev().toString().length() > 19){
+                        System.out.println("FIGYELEM EXTRA HOSSZÚ VÁROS NÉV " + tanulo[i].getHely() + "\n");
                         vanBennehiba = true;
                     }
                 }else{
@@ -144,38 +144,38 @@ public class WritePDF_in_one_pdf {
                 PlaceChunck(writer, tanulo[i].getSornaploszam(), 350, 766, font_size);
                 PlaceChunck(writer, "magyar", 102, 677, font_size);
 
-                if (tanulo[i].getSzuletes_KIR() == ""){
-                    System.out.println("Nincs meg a szuletesi eve: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getSzuletes_KIR().toString().length() < 2){
+                    System.out.println("Nincs meg a szuletesi eve: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getNev() == ""){
-                    System.out.println("Nincs meg a neve: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getNev().length() < 3){
+                    System.out.println("Nincs meg a neve: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getAzonosito() == ""){
-                    System.out.println("Nincs meg az azonosítója: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getAzonosito().length() < 11){
+                    System.out.println("Nincs meg az azonosítója: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getAnyanev() == ""){
-                    System.out.println("Nincs meg az anya neve: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getAnyanev().length() < 3){
+                    System.out.println("Nincs meg az anya neve: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getHely() == ""){
-                    System.out.println("Nincs meg a szuletesi helye: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getHely().length() < 3){
+                    System.out.println("Nincs meg a szuletesi helye: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getEvfolyam() == ""){
-                    System.out.println("Nincs meg az evfolyama: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getEvfolyam().length() < 4){
+                    System.out.println("Nincs meg az evfolyama: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getSornaploszam() == ""){
-                    System.out.println("Nincs meg a szuletesi eve: "+tanulo[i].getAzonosito());
+                if (tanulo[i].getSornaploszam().length() < 3){
+                    System.out.println("Nincs meg a szuletesi eve: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());
                     vanBennehiba = true;
                 }
 
