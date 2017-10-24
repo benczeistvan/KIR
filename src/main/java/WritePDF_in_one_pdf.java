@@ -88,7 +88,7 @@ public class WritePDF_in_one_pdf {
                     System.out.println(tanulo[i].getNev() + " Túl hosszú név");
                     if (tanulo[i].getNev().toString().length() > 27){
                         System.out.println("FIGYELEM EXTRA HOSSZÚ NÉV: " + tanulo[i].getNev() + "\n");
-                        vanBennehiba = true;
+                        //vanBennehiba = true;
                     }
                 }else{
                     PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), 102, 744, font_size);
@@ -99,9 +99,9 @@ public class WritePDF_in_one_pdf {
                 if (tanulo[i].getAnyanev().toString().length() > 24){
                     System.out.println(tanulo[i].getAnyanev() + " Túl hosszú Anya név");
                     PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), 98, 698, font_size_small);
-                    if (tanulo[i].getAnyanev().toString().length() > 26){
-                        System.out.println("FIGYELEM EXTRA HOSSZÚ ANYA NÉV" + tanulo[i].getAnyanev() + "\n");
-                        vanBennehiba = true;
+                    if (tanulo[i].getAnyanev().toString().length() >30){
+                        System.out.println("FIGYELEM EXTRA HOSSZÚ ANYA NÉV: " + tanulo[i].getAnyanev() + "\n");
+                        //vanBennehiba = true;
                     }
                 }else{
                     PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), 102, 698, font_size);
@@ -110,12 +110,12 @@ public class WritePDF_in_one_pdf {
 
 
 
-                if (tanulo[i].getHely().toString().length() > 16){
+                if (tanulo[i].getHely().toString().length() > 14){
                     PlaceChunck(writer, tanulo[i].getHely(), 98, 721, font_size_small);
                     System.out.println(tanulo[i].getHely() + " Túl hosszú város");
-                    if (tanulo[i].getNev().toString().length() > 19){
+                    if (tanulo[i].getHely().toString().length() > 17){
                         System.out.println("FIGYELEM EXTRA HOSSZÚ VÁROS NÉV " + tanulo[i].getHely() + "\n");
-                        vanBennehiba = true;
+                        //vanBennehiba = true;
                     }
                 }else{
                     PlaceChunck(writer, tanulo[i].getHely(), 102, 721, font_size);
@@ -179,10 +179,12 @@ public class WritePDF_in_one_pdf {
                     vanBennehiba = true;
                 }
 
-                if (tanulo[i].getHely().toLowerCase().contains(".") || tanulo[i].getHely().toLowerCase().contains("/")) {
-                    System.out.println("Külföldi van benne! Neve: " + tanulo[i].getNev() + " " + tanulo[i].getAzonosito());
-                    System.out.println(tanulo[i].getHely() + "\n");
-                    vanBennehiba = true;
+                if (!tanulo[i].getHely().contains("Budapest")) {
+                    if (tanulo[i].getHely().toLowerCase().contains(".") || tanulo[i].getHely().toLowerCase().contains("/")) {
+                        System.out.println("Külföldi van benne! Neve: " + tanulo[i].getNev() + " " + tanulo[i].getAzonosito());
+                        System.out.println(tanulo[i].getHely() + "\n");
+                        vanBennehiba = true;
+                    }
                 }
 
                 if (tanulo[i].getBeirasinaplo().toString().toLowerCase().contains("ány")){

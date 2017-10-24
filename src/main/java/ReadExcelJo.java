@@ -50,7 +50,8 @@ public class ReadExcelJo {
         boolean vanBenneHiba = false;
         boolean vanBenneHibaNagy = false;
 
-        int i = 0; ///AZ i az a lapok indexe
+        int i = 1; ///AZ i az a lapok indexe
+        int vanOsztaly = 0;
 
         if (egyoszlopos(DEST, i)){
             System.out.println("Egy oszlopos");
@@ -143,7 +144,7 @@ public class ReadExcelJo {
 
 
 
-
+                        vanOsztaly = 0;
                         ///////////VEGIG MEGYEK A SAJAT EXCEL sorain
                         /////////////
                         for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
@@ -187,78 +188,94 @@ public class ReadExcelJo {
                             }
 
                             if (j == 6 + osztaly){
-                                tanulo[index].setHely(capitalizeString(cellData.toString().toLowerCase()));
+                                String helyseg = capitalizeString(cellData.toString().toLowerCase());
+                                if (helyseg.contains("Budapest")){
+                                    helyseg.replaceAll("i", String.valueOf(Character.toUpperCase('i')));
+                                }
+                                tanulo[index].setHely(helyseg);
                             }
 
                             if (j == 16 + osztaly) {
                                 if (cellData.toString() != "") {
                                     tanulo[index].setEvfolyam("Előképző 1");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 17 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Előképző 2");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 18 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Alap 1");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 19 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Alap 2");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 20 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Alap 3");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 21 + osztaly){
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Alap 4");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 22 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Alap 5");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 23 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Alap 6");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 24 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Továbbképző 7");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 25 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Továbbképző 8");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 26 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Továbbképző 9");
+                                    vanOsztaly++;
                                 }
                             }
 
                             if (j == 27 + osztaly) {
-                                if (cellData.toString() != "") {
+                                if (cellData.toString().contains("1")) {
                                     tanulo[index].setEvfolyam("Továbbképző 10");
+                                    vanOsztaly++;
                                 }
                             }
 
@@ -558,21 +575,40 @@ public class ReadExcelJo {
 
 
 
-
     ////////szojavito
     public static String capitalizeString(String string) {
-        char[] chars = string.toLowerCase().toCharArray();
-        boolean found = false;
-        for (int i = 0; i < chars.length; i++) {
-            if (!found && Character.isLetter(chars[i])) {
-                chars[i] = Character.toUpperCase(chars[i]);
-                found = true;
-            } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') { // You can add other chars here
-                found = false;
+
+        if (!string.contains("budapest")) {
+            char[] chars = string.toLowerCase().toCharArray();
+            boolean found = false;
+            for (int i = 0; i < chars.length; i++) {
+                if (!found && Character.isLetter(chars[i])) {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                    found = true;
+                } else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\'') { // You can add other chars here
+                    found = false;
+                }
             }
+            return String.valueOf(chars);
+        }else{
+            char[] chars = string.toLowerCase().toCharArray();
+            boolean found = false;
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == 'i'){
+                    chars[i] = Character.toUpperCase(chars[i]);
+                }
+                if (!found && Character.isLetter(chars[i])) {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                    found = true;
+                } else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\'') { // You can add other chars here
+                    found = false;
+                }
+            }
+            return String.valueOf(chars);
         }
-        return String.valueOf(chars);
+
     }
+
 
 
 }
