@@ -1,64 +1,79 @@
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 public class WriteExcel {
+    public Row row;
+    public Cell cell;
 
-    public boolean write() {
+    public boolean write(String string, int k, int l, int m, String DEST) throws IOException {
 
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Sample sheet");
 
-        Map<String, Object[]> data = new HashMap<String, Object[]>();
-        data.put("1", new Object[] {"Emp No.", "Name", "Salary"});
-        data.put("2", new Object[] {1d, "John", 1500000d});
-        data.put("3", new Object[] {2d, "Sam", 800000d});
-        data.put("4", new Object[] {3d, "Dean", 700000d});
+        FileInputStream input_excel = new FileInputStream(new File(DEST));
+        HSSFWorkbook my_xls_workbook = new HSSFWorkbook(input_excel);
+        HSSFSheet my_worksheet = my_xls_workbook.getSheetAt(m);
 
-        Set<String> keyset = data.keySet();
-        int rownum = 0;
-        for (String key : keyset) {
-            Row row = sheet.createRow(rownum++);
-            Object [] objArr = data.get(key);
-            int cellnum = 0;
-            for (Object obj : objArr) {
-                Cell cell = row.createCell(cellnum++);
-                if(obj instanceof Date)
-                    cell.setCellValue((Date)obj);
-                else if(obj instanceof Boolean)
-                    cell.setCellValue((Boolean)obj);
-                else if(obj instanceof String)
-                    cell.setCellValue((String)obj);
-                else if(obj instanceof Double)
-                    cell.setCellValue((Double)obj);
+        Cell cell = null;
+        // Access the cell first to update the value
+
+        //my_worksheet.getRow(10).getCell(8).setCellValue("ISTVANKAAAA");
+
+        // Get current value and then add 5 to it
+
+        if (string != "setAsActiveCell") {
+
+            Iterator<Row> rowIterator = my_worksheet.iterator();
+            for (int i = 0; i < k; i++) {
+                row = rowIterator.next();
             }
+            Iterator<Cell> cellIterator = row.cellIterator();
+            for (int i = 0; i < l; i++) {
+                cell = cellIterator.next();
+            }
+
+
+            cell.setCellValue(string);
+        }else{
+
+
+            Iterator<Row> rowIterator = my_worksheet.iterator();
+            for (int i = 0; i < k; i++) {
+                row = rowIterator.next();
+            }
+            Iterator<Cell> cellIterator = row.cellIterator();
+            for (int i = 0; i < 26 + m; i++) {
+                cell = cellIterator.next();
+                if (i > 13) {
+                    if (cell.getCellType() == Cell.CELL_TYPE_BLANK){
+                        System.out.println("BLANK");
+                    }
+
+                    cell.setAsActiveCell();
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    cell.setCellValue("0");
+                    if (!cell.getStringCellValue().contains("1")) {
+                        cell.setCellValue("0");
+                        // System.out.println(cell.getStringCellValue());
+                    }
+                }
+            }
+
         }
 
-        try {
-            FileOutputStream out =
-                    new FileOutputStream(new File("/home/lbene/Documents/ExcelJava/src/main/java/new.xls"));
-            workbook.write(out);
-            out.close();
-            System.out.println("Excel written successfully..");
+        input_excel.close();
 
-            return true;
+        FileOutputStream output_file =new FileOutputStream(new File(DEST));
+        //write changes
+        my_xls_workbook.write(output_file);
+        //close the stream
+        output_file.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return true;
     }
 }

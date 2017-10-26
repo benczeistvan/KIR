@@ -8,12 +8,13 @@ import java.io.IOException;
 public class ModifyPDF {
 
     PdfWriter writer;
-    public String templateInputStream = "/Users/istvan/projektek/excell 2/src/main/java/torzslap.pdf";
+    public String templateInputStream = "/Users/istvan/GitHub/KIR/src/main/java/torzslap_zene.pdf";
 
     public boolean modify(Tanulo tanulo[], int index, String DESTINATION){
 
         int font_size = 12;
         int font_size_small = 11;
+        int font_size_small_extra = 10;
 
         //eddig kell majd hivatalosan menjen: readExcel.index
         //FIGYELEM AZ INDEXELES ONNAN KEZDODIK AMIKOR vannak adatok javitas folyamatban
@@ -42,35 +43,99 @@ public class ModifyPDF {
 
                 //A4 meret: 595x842
 
+                boolean zene = true;
 
-                if (tanulo[i].getNev().toString().length() > 24){
-                    PlaceChunck(tanulo[i].getNev(), 96, 744, font_size_small);
+                int nev_x = 102;
+                int nev_y = 744;
+
+                int anyanev_x = 102;
+                int anyanev_y = 698;
+
+                int szulHely_x = 102;
+                int szulHely_y = 721;
+
+                int azonosito_x = 350;
+                int azonosito_y = 746;
+
+                int szuletes_ev_x = 350;
+                int szuletes_ev_y = 721;
+
+                int evfolyam_x = 102;
+                int evfolyam_y = 766;
+
+                int beirasi_naplo_x = 245;
+                int beirasi_naplo_y = 766;
+
+                int sornaploszam_x = 350;
+                int sornaploszam_y = 766;
+
+                int magyar_x = 102;
+                int magyar_y = 677;
+
+
+                if (zene) {
+                    nev_x = 110;
+                    nev_y = 730;
+
+                    anyanev_x = 110;
+                    anyanev_y = 680;
+
+                    szulHely_x = 110;
+                    szulHely_y = 705;
+
+                    azonosito_x = 358;
+                    azonosito_y = 732;
+
+                    szuletes_ev_x = 358;
+                    szuletes_ev_y = 708;
+
+                    evfolyam_x = 110;
+                    evfolyam_y = 757;
+
+                    beirasi_naplo_x = 272;
+                    beirasi_naplo_y = 757;
+
+                    sornaploszam_x = 358;
+                    sornaploszam_y = 757;
+
+                    magyar_x = 110;
+                    magyar_y = 655;
+                }
+
+
+                if (tanulo[i].getNev().toString().length() > 17){
+                    if (tanulo[i].getNev().toString().length() > 19){
+                        PlaceChunck(tanulo[i].getNev().toString(), nev_x - 5, nev_y, font_size_small_extra);
+                        //vanBennehiba = true;
+                    }else {
+                        PlaceChunck(tanulo[i].getNev().toString(), nev_x - 3, nev_y, font_size_small);
+                    }
                 }else{
-                    PlaceChunck(tanulo[i].getNev(), 102, 744, font_size);
+                    PlaceChunck(tanulo[i].getNev(), nev_x, nev_y, font_size);
                 }
 
                 if (tanulo[i].getAnyanev().toString().length() > 24){
-                    PlaceChunck(tanulo[i].getAnyanev(), 96, 698, font_size_small);
+                    PlaceChunck(tanulo[i].getAnyanev(), anyanev_x - 3, anyanev_y, font_size_small);
                 }else{
-                    PlaceChunck(tanulo[i].getAnyanev(), 102, 698, font_size);
+                    PlaceChunck(tanulo[i].getAnyanev(), anyanev_x, anyanev_y, font_size);
                 }
 
                 if (tanulo[i].getHely().toString().length() > 17){
-                    PlaceChunck(tanulo[i].getHely(), 96, 721, font_size_small);
+                    PlaceChunck(tanulo[i].getHely(), szulHely_x - 4, szulHely_y, font_size_small);
                 }else{
-                    PlaceChunck(tanulo[i].getHely(), 102, 721, font_size);
+                    PlaceChunck(tanulo[i].getHely(), szulHely_x, szulHely_y, font_size);
                 }
 
 
                 //PlaceChunck(tanulo[i].getNev(), 102, 744);
-                PlaceChunck(tanulo[i].getAzonosito(), 350, 746, 12);
+                PlaceChunck(tanulo[i].getAzonosito(), azonosito_x, azonosito_y, 12);
                 //PlaceChunck(tanulo[i].getHely(), 102, 721);
-                PlaceChunck(tanulo[i].getSzuletes().toString(), 350, 721, 12);
+                PlaceChunck(tanulo[i].getSzuletes().toString(), szuletes_ev_x, szuletes_ev_y, 12);
                 //PlaceChunck(tanulo[i].getAnyanev(), 102, 698);
-                PlaceChunck(tanulo[i].getEvfolyam(), 102, 766, 12);
-                PlaceChunck(tanulo[i].getBeirasinaplo(), 245, 766, 12);
-                PlaceChunck(tanulo[i].getSornaploszam(), 350, 766, 12);
-                PlaceChunck("magyar", 102, 677, 12);
+                PlaceChunck(tanulo[i].getEvfolyam(), evfolyam_x, evfolyam_y, 12);
+                PlaceChunck(tanulo[i].getBeirasinaplo(), beirasi_naplo_x, beirasi_naplo_y, 12);
+                PlaceChunck(tanulo[i].getSornaploszam(), sornaploszam_x, sornaploszam_y, 12);
+                PlaceChunck("magyar", magyar_x, magyar_y, 12);
 
 
                 //document.add(createFirstTable());

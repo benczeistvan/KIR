@@ -26,6 +26,7 @@ public class WritePDF_in_one_pdf {
 
         int font_size = 12;
         int font_size_small = 11;
+        int font_size_small_extra = 10;
         //System.out.println("ennyi gyerkőc van: " + readExcel.index);
         //eddig kell majd hivatalosan menjen: readExcel.index
         for (int i = 1; i <= meret; i++) {
@@ -82,43 +83,108 @@ public class WritePDF_in_one_pdf {
 //
 //                String date = ev + "." + honap + "." + nap + ".";
 
+                boolean zene = true;
 
-                if (tanulo[i].getNev().toString().length() > 24){
-                    PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), 98, 744, font_size_small);
-                    System.out.println(tanulo[i].getNev() + " Túl hosszú név");
-                    if (tanulo[i].getNev().toString().length() > 27){
-                        System.out.println("FIGYELEM EXTRA HOSSZÚ NÉV: " + tanulo[i].getNev() + "\n");
-                        //vanBennehiba = true;
-                    }
+                int nev_x = 102;
+                int nev_y = 744;
+
+                int anyanev_x = 102;
+                int anyanev_y = 698;
+
+                int szulHely_x = 102;
+                int szulHely_y = 721;
+
+                int azonosito_x = 350;
+                int azonosito_y = 746;
+
+                int szuletes_ev_x = 350;
+                int szuletes_ev_y = 721;
+
+                int evfolyam_x = 102;
+                int evfolyam_y = 766;
+
+                int beirasi_naplo_x = 245;
+                int beirasi_naplo_y = 766;
+
+                int sornaploszam_x = 350;
+                int sornaploszam_y = 766;
+
+                int magyar_x = 102;
+                int magyar_y = 677;
+
+
+                if (zene) {
+                    nev_x = 110;
+                    nev_y = 730;
+
+                    anyanev_x = 110;
+                    anyanev_y = 680;
+
+                    szulHely_x = 110;
+                    szulHely_y = 705;
+
+                    azonosito_x = 358;
+                    azonosito_y = 732;
+
+                    szuletes_ev_x = 358;
+                    szuletes_ev_y = 708;
+
+                    evfolyam_x = 110;
+                    evfolyam_y = 757;
+
+                    beirasi_naplo_x = 272;
+                    beirasi_naplo_y = 757;
+
+                    sornaploszam_x = 358;
+                    sornaploszam_y = 757;
+
+                    magyar_x = 110;
+                    magyar_y = 655;
                 }else{
-                    PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), 102, 744, font_size);
+
                 }
 
 
+                //////NEVNEK A HELYE
+                if (tanulo[i].getNev().toString().length() > 17){
+                    if (tanulo[i].getNev().toString().length() > 19){
+                        System.out.println("FIGYELEM EXTRA HOSSZÚ NÉV: " + tanulo[i].getNev() + "\n");
+                        PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), nev_x - 4, nev_y, font_size_small_extra);
+                        //vanBennehiba = true;
+                    }else {
+                        PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), nev_x - 2, nev_y, font_size_small);
+                        System.out.println(tanulo[i].getNev() + " Túl hosszú név");
+                    }
 
-                if (tanulo[i].getAnyanev().toString().length() > 24){
+                }else{
+                    PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), nev_x, nev_y, font_size);
+                }
+
+
+                //ANYANEVNEK A HELYE
+                if (tanulo[i].getAnyanev().toString().length() > 17){
                     System.out.println(tanulo[i].getAnyanev() + " Túl hosszú Anya név");
-                    PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), 98, 698, font_size_small);
-                    if (tanulo[i].getAnyanev().toString().length() >30){
+                    PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), anyanev_x - 2, anyanev_y, font_size_small);
+                    if (tanulo[i].getAnyanev().toString().length() > 20){
                         System.out.println("FIGYELEM EXTRA HOSSZÚ ANYA NÉV: " + tanulo[i].getAnyanev() + "\n");
                         //vanBennehiba = true;
                     }
                 }else{
-                    PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), 102, 698, font_size);
+                    PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), anyanev_x, anyanev_y, font_size);
                 }
 
 
 
-
+                ////SZULETESI HELYNEK A NEVE
                 if (tanulo[i].getHely().toString().length() > 14){
-                    PlaceChunck(writer, tanulo[i].getHely(), 98, 721, font_size_small);
+                    PlaceChunck(writer, tanulo[i].getHely(), szulHely_x - 4, szulHely_y, font_size_small);
                     System.out.println(tanulo[i].getHely() + " Túl hosszú város");
                     if (tanulo[i].getHely().toString().length() > 17){
                         System.out.println("FIGYELEM EXTRA HOSSZÚ VÁROS NÉV " + tanulo[i].getHely() + "\n");
                         //vanBennehiba = true;
                     }
                 }else{
-                    PlaceChunck(writer, tanulo[i].getHely(), 102, 721, font_size);
+                    PlaceChunck(writer, tanulo[i].getHely(), szulHely_x, szulHely_y, font_size);
                 }
 
 
@@ -134,15 +200,15 @@ public class WritePDF_in_one_pdf {
 
 
                 //PlaceChunck(writer, capitalizeString(tanulo[i].getNev().toString().toLowerCase()), 102, 744);
-                PlaceChunck(writer, tanulo[i].getAzonosito(), 350, 746, font_size);
+                PlaceChunck(writer, tanulo[i].getAzonosito(), azonosito_x, azonosito_y, font_size);
                 //PlaceChunck(writer, tanulo[i].getHely(), 102, 721);
                 //PlaceChunck(writer, date, 350, 721);
-                PlaceChunck(writer, tanulo[i].getSzuletes_KIR(), 350, 721, font_size);
+                PlaceChunck(writer, tanulo[i].getSzuletes_KIR(), szuletes_ev_x, szuletes_ev_y, font_size);
                 //PlaceChunck(writer, capitalizeString(tanulo[i].getAnyanev().toString().toLowerCase()), 102, 698);
-                PlaceChunck(writer, tanulo[i].getEvfolyam(), 102, 766, font_size);
-                PlaceChunck(writer, tanulo[i].getBeirasinaplo(), 245, 766, font_size);
-                PlaceChunck(writer, tanulo[i].getSornaploszam(), 350, 766, font_size);
-                PlaceChunck(writer, "magyar", 102, 677, font_size);
+                PlaceChunck(writer, tanulo[i].getEvfolyam(), evfolyam_x, evfolyam_y, font_size);
+                PlaceChunck(writer, tanulo[i].getBeirasinaplo(), beirasi_naplo_x, beirasi_naplo_y, font_size);
+                PlaceChunck(writer, tanulo[i].getSornaploszam(), sornaploszam_x, sornaploszam_y, font_size);
+                PlaceChunck(writer, "magyar", magyar_x, magyar_y, font_size);
 
                 if (tanulo[i].getSzuletes_KIR().toString().length() < 2){
                     System.out.println("Nincs meg a szuletesi eve: "+tanulo[i].getAzonosito() + " " + tanulo[i].getNev());

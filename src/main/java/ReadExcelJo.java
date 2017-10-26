@@ -9,9 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by lbene on 17.08.2017.
@@ -29,6 +27,8 @@ public class ReadExcelJo {
 
     public int ismetloIndex;
     public int hibasTanuloIndex = 0;
+
+
 
 
     public static final int sajatNev = 2;
@@ -50,7 +50,7 @@ public class ReadExcelJo {
         boolean vanBenneHiba = false;
         boolean vanBenneHibaNagy = false;
 
-        int i = 1; ///AZ i az a lapok indexe
+        int i = 3; ///AZ i az a lapok indexe
         int vanOsztaly = 0;
 
         if (egyoszlopos(DEST, i)){
@@ -68,6 +68,8 @@ public class ReadExcelJo {
         }
 
         WritePDF writePDF = new WritePDF();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         try {
 
@@ -147,6 +149,12 @@ public class ReadExcelJo {
                         vanOsztaly = 0;
                         ///////////VEGIG MEGYEK A SAJAT EXCEL sorain
                         /////////////
+
+                        //WriteExcel writeExcel = new WriteExcel();
+
+                        //writeExcel.write("setAsActiveCell", index + 5, osztaly, i, DEST);
+
+
                         for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
                             Cell cellData = cellIterator.next();
                             //                            todo work with the data
@@ -194,6 +202,8 @@ public class ReadExcelJo {
                                 }
                                 tanulo[index].setHely(helyseg);
                             }
+
+                            //if (j == 15 + )
 
                             if (j == 16 + osztaly) {
                                 if (cellData.toString() != "") {
@@ -280,8 +290,17 @@ public class ReadExcelJo {
                             }
 
                             if (j == 28 + osztaly) {
-                                tanulo[index].setSornaploszam(index + "/" + cellData.toString());
-                                sorszam = "";
+                                if (cellData.toString().toLowerCase().contains(tanulo[index].getNev().toString().toLowerCase())){
+                                    System.out.println("Hibás sorszám/naplószám!!  " + tanulo[index].getSornaploszam().toString() + "->" + tanulo[index].getNev() + " " + tanulo[index].getAzonosito() +
+                                    "\nindex: " + index + " lap: " + i);
+                                    System.out.println("Kérem az új sornaplószámot: ");
+                                    String s = br.readLine();
+                                    tanulo[index].setSornaploszam(index + "/" + s);
+                                    System.out.println("Rendben, új sornapló szám: " + index + "/" + s);
+
+                                }else {
+                                    tanulo[index].setSornaploszam(index + "/" + cellData.toString());
+                                }
                             }
 
                             if (j == 32 + osztaly) {
